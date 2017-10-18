@@ -1,0 +1,18 @@
+*.pyc
+.DS_Store
+*.swp
+/venv/
+/static/
+/media/
+/.vagrant/
+ansible/.vagrant/
+/Vagrantfile.local
+/docs/_build/
+node_modules
+ansible/{{ cookiecutter.project_slug }}_keystore/*
+ansible/group_vars/*
+ansible/host_vars/*
+.env
+env.example
+env.production
+pages/static/libs

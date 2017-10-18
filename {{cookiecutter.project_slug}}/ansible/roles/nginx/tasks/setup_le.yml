@@ -1,0 +1,132 @@
+{% raw %}---
+# This Playbook based on https://certbot.eff.org/
+- name: install the letsencrypt apt package 
+  apt: name=letsencrypt state=latest update_cache=yes cache_valid_time=3600
+  become: yes
+  become_user: root
+  when: use_ssl|bool and ansible_distribution == 'Ubuntu' and ansible_distribution_release == 'xenial'
+  tags:
+      - le 
+      - ssl
+
+- name: OS does not come with letsencrypt apt package 
+  get_url: dest=/opt/certbot-auto url=https://dl.eff.org/certbot-auto 
+  become: yes
+  become_user: root
+  when: use_ssl|bool and ansible_distribution == 'Ubuntu' and ansible_distribution_release == 'trusty'
+  tags:
+      - le 
+      - ssl
+
+- name: Make the certbot-auto executable
+  file: path=/opt/certbot-auto mode=0744
+  become: yes
+  become_user: root
+  when: use_ssl|bool and ansible_distribution == 'Ubuntu' and ansible_distribution_release == 'trusty'
+  tags:
+      - le 
+      - ssl
+    
+- name: create the letsencrypt config dir
+  become: yes
+  become_user: root
+  file: path=/etc/letsencrypt
+        state=directory
+        mode=755
+  when: use_ssl|bool
+  tags:
+      - le
+      - ssl
+
+- name: Check to see if the Cert has already been generated
+  become: yes
+  become_user: root
+  stat:
+    path: "/etc/letsencrypt/live/{{ django_env.HOST_NAME }}/fullchain.pem"
+  register: cert_stat
+  tags:
+      - le
+      - ssl
+
+- name: upload le-cli standalone config
+  become: yes
+  become_user: root
+  template: src=le-cli.j2
+            dest=/etc/letsencrypt/cli.ini
+            backup=yes
+
+  when: use_ssl|bool and not cert_stat.stat.exists
+  tags:
+      - le
+      - ssl
+
+- name: Check to see if to use certbot-auto or letsencrpt
+  become: yes
+  become_user: root
+  stat:
+      path: "/opt/certbot-auto"
+  register: certbot_auto 
+  tags:
+      - le
+      - ssl
+
+- name: Generate CSR, Sign and Download using downloaded certbot-auto  
+  become: yes
+  become_user: root
+  command: /opt/certbot-auto certonly --standalone  --agree-tos --config /etc/letsencrypt/cli.ini
+  when: use_ssl|bool and certbot_auto.stat.exists 
+  tags:
+      - le
+      - ssl
+
+- name: Generate CSR, Sign and Download using letsencrypt apt package
+  become: yes
+  become_user: root
+  command: letsencrypt certonly --standalone  --agree-tos --config /etc/letsencrypt/cli.ini
+  when: use_ssl|bool and certbot_auto.stat.exists == False
+  tags:
+      - le
+      - ssl
+ 
+- name: Generate stronger DHE parameters
+  become: yes
+  become_user: root
+  command: openssl dhparam -out dhparam.pem 2048
+  args:
+    chdir: /etc/letsencrypt/live/{{ django_env.HOST_NAME }}/
+    creates: "/etc/letsencrypt/live/{{ django_env.HOST_NAME }}/dhparam.pem"
+  when: use_ssl|bool 
+  tags:
+      - le
+      - ssl
+
+- name: Remove the domains in le-cli to allow the renew command to run
+  lineinfile: dest=/etc/letsencrypt/cli.ini 
+              regexp='^domains' 
+              line="#domains = {{ django_env.HOST_NAME }}, www.{{django_env.HOST_NAME}}"
+  become: yes
+  become_user: root
+  when: use_ssl|bool 
+  tags:
+      - le
+      - ssl
+
+- name: Dry run from cerbot-auto 
+  command: /opt/certbot-auto renew --dry-run --agree-tos
+  become: yes
+  become_user: root
+  register: autorenew 
+  when: use_ssl|bool and certbot_auto.stat.exists
+  tags:
+      - le
+      - ssl
+
+- name: Dry run using letencrypt package 
+  command: letsencrypt renew --dry-run --agree-tos
+  become: yes
+  register: autorenew 
+  become_user: root
+  when: use_ssl|bool and certbot_auto.stat.exists == False
+  tags:
+      - le
+      - ssl{% endraw %}

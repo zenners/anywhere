@@ -1,0 +1,12 @@
+{% raw %}{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Site is Temporarily Down{% endblock %}
+
+{% block content %}
+<div id="content" class="row">
+  <div class="medium-7 medium-centered columns pad" style="text-align: center;">
+    <img src="{% static 'img/500.png' %}">
+  </div>
+</div>
+{% endblock %}{% endraw %}

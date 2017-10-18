@@ -1,0 +1,519 @@
+$primary: map-get($foundation-palette, primary);
+$secondary: map-get($foundation-palette, secondary);
+$static: static;
+
+// SOCIAL BAR
+$social-bar-position: left; // Change this value to `right` for changing sidebar's position.
+$social-bar-transformation: rem-calc(140);
+$social-bar-width: rem-calc(180);
+$social-bar-background: #333333;
+$social-icon-color: $white;
+$social-icon-transition: all 0.3s ease-in-out;
+$social-icon-font-size: 1.1rem;
+$social-icon-padding: 0.5rem;
+
+// Source: https://designpieces.com/2012/12/social-media-colours-hex-and-rgb/
+$social-brand-facebook: #3b5998;
+$social-brand-twitter: #55acee;
+$social-brand-linkedin: #007bb5;
+$social-brand-google: #3cba54;
+$social-brand-pinterest: #cb2027;
+$social-brand-mail: $primary;
+$social-brand-print: #777;
+
+.sticky-social-bar {
+  padding: 0;
+  margin: 0; 
+  top: 50%;
+  z-index: 9999;
+  transform: translateY(-50%);
+  width: $social-bar-width;
+  background-color: $social-bar-background;
+  position: fixed;
+	
+  @if $social-bar-position == left {
+	  left: $social-bar-transformation * -1;
+  }
+  @if $social-bar-position == right {
+	  right: $social-bar-transformation * -1;
+  }
+
+  .social-icon {
+    list-style-type: none;
+    color: $social-icon-color;
+    background-color: inherit;
+    margin: 0;
+    transition: $social-icon-transition;
+    cursor: pointer;
+    font-size: $social-icon-font-size;
+    padding: 0.25rem 0.25rem 0.5rem;
+
+    &:first-of-type {
+	    padding-top: 0.375rem;
+    }
+    &:last-of-type {
+	    padding-bottom: 0.625rem;
+    }
+
+    > a {
+      color: inherit;
+      background-color: inherit;
+
+      > .fa {
+        padding: $social-icon-padding;
+        width: 2rem;
+        height: 2rem;
+
+        @if $social-bar-position == left {
+          float: right;
+          margin-left: 0.5rem;
+        }
+        @if $social-bar-position == right {
+          float: left;
+          margin-right: 0.5rem;
+        }
+
+        &.fa-facebook {
+          background-color: $social-brand-facebook;
+        }
+        &.fa-twitter {
+          background-color: $social-brand-twitter;
+        }
+        &.fa-linkedin {
+          background-color: $social-brand-linkedin;
+        }
+        &.fa-google-plus {
+          background-color: $social-brand-google;
+        }
+        &.fa-pinterest-p {
+          background-color: $social-brand-pinterest;
+        }
+        &.fa-envelope {
+          background-color: $social-brand-mail;
+        }
+        &.fa-print {
+          background-color: $social-brand-print;
+        }
+      }
+
+      > .social-icon-text {
+        font-size: 80%;
+        color: $social-icon-color;
+        text-transform: uppercase;
+
+        @if $social-bar-position == left {
+          margin-right: 0.5rem;
+        }
+        @if $social-bar-position == right {
+          margin-left: 0.5rem;
+        }
+      }
+    }
+
+    &:hover {
+
+      @if $social-bar-position == left {
+        transform:translateX($social-bar-transformation * 1);
+      }
+      @if $social-bar-position == right {
+        transform:translateX($social-bar-transformation * -1);
+      }
+
+      > a {
+        color: inherit;
+        background-color: inherit;
+      }
+    }
+  }
+}
+// END SOCIAL BAR
+
+
+
+// PAGE HERO
+
+.hero-section {
+  background: linear-gradient(
+    rgba(0, 0, 0, 0.3), 
+    rgba(0, 0, 0, 0.4)
+  );
+  background-position: top center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  .hero-section-text {
+    width: 60%;
+    color: $white;
+    h1 {color: $white; font-weight: 400;}
+  }
+}
+
+.hero-section.page {
+	.hero-content {
+		background: linear-gradient(
+		  rgba(0, 0, 0, 0.7), 
+		  rgba(0, 0, 0, 0.8)
+		);
+		width: 100%;
+		height: 100%;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+	}
+	.hero-section-text {
+	  width: 100%;
+	}
+	height: 180px;
+	@include breakpoint(small only) {
+	  max-height: 150px;
+	}
+}
+
+// END PAGE HERO
+
+
+
+// MORE NEWS FEED
+
+.article-row-section {
+  @include flex-grid-row(null, $global-width, 12);
+  justify-content: center;
+}
+
+.article-row-section-inner {
+  @include flex-grid-column(12);
+
+  @include breakpoint(medium) {
+    @include flex-grid-column(8);
+  }
+}
+
+.article-row-section-header {
+  padding: 1.5rem 0;
+  margin: 0;
+  line-height: 1;
+}
+
+.article-row {
+  display: flex;
+  flex-direction: column;
+  border-top: 1px solid $light-gray;
+  padding: 1.5rem 0;
+
+   @include breakpoint(medium) {
+    flex-direction: row;
+  }
+}
+
+.article-row-img img {
+  width: 100%;
+  border-radius: 5px;
+
+  @include breakpoint(medium) {
+    max-width: none;
+    width: auto;
+  }
+}
+
+.article-row-content {
+  padding: 1.5rem 0 0;
+  color: #777;
+
+  @include breakpoint(medium) {
+    padding: 0 0 0 1.5rem;
+  }
+}
+
+.article-row-content-header {
+  font-size: 1.5rem;
+  color: $primary;
+}
+
+.article-row-content-description {
+  font-size: 1.25rem;
+}
+
+.article-row-content-author,
+.article-row-content-time {
+  font-size: 0.875rem;
+  margin-bottom: 0;
+  color: $dark-gray;
+}
+
+.article-row-reversed {
+  .article-row-content {
+    order: 2;
+    padding: 0 1.5rem 0 0;
+  }
+
+  .article-row-img {
+    order: 1;
+    padding: 0 0 1.5rem 0;
+  }
+
+  @include breakpoint(medium) {
+    .article-row-content {
+      order: 1;
+    }
+
+    .article-row-img {
+      order: 2;
+    }
+  }
+}
+
+// END MORE NEWS FEED
+
+
+
+
+// BLOG HEADER
+$large-article-header-color: $white;
+$large-article-header-height: rem-calc(500);
+
+.large-article-header {
+  background: no-repeat center;
+  background-size: cover;
+  height: 250px;
+  position: relative;
+
+  @include breakpoint(small only) {
+    height: ($large-article-header-height / 1.5);
+  }
+}
+
+.large-article-header-content {
+  background: rgba(0,0,0, 0.65) url("/#{$static}/img/overlay.png") top center repeat;
+  display: flex;
+  flex-direction: column;
+  position: absolute;
+  height: 100%;
+  padding-top: 60px;
+  left: 0;
+  right: 0;
+
+  @include breakpoint(small only) {
+    bottom: rem-calc(20);
+  }
+
+  .center-container {
+    width: 60%;
+    margin: 0 auto;
+
+    @include breakpoint(small only) {
+      width: 100%;
+      padding: 0 rem-calc(20);
+    }
+  }
+
+  .article-date {
+    color: $large-article-header-color;
+  }
+  .article-title {
+    h1 {
+      line-height: rem-calc(50);
+      color: $large-article-header-color;
+      font-weight: 600;
+
+      @include breakpoint(small only) {
+        line-height: rem-calc(30);
+      }
+    }
+  }
+  .article-details {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    a {
+      color: $large-article-header-color;
+    }
+  }
+  .article-author {
+    display: flex;
+    align-items: center;
+    margin: $global-margin 0;
+    img {
+      border-radius: rem-calc(50);
+    }
+    a {
+      margin-left: $global-margin;
+    }
+  }
+}
+
+@include breakpoint(small only) {
+    .large-article-header {
+        .large-article-header-content {bottom: 0;}
+        .article-title {
+            h1 {
+              line-height: 2rem;
+              font-weight: 400;
+              font-size: 1.5rem;
+            }
+          }
+      }
+}
+
+// END BLOG HEADER
+
+
+
+// CALLOUT NOTIFICATION 
+
+.notification-callout-alert {
+ display:-ms-flexbox;
+ display:flex;
+ -ms-flex-align:start;
+ align-items:flex-start;
+ background: #fff;
+ padding: 10px 15px;
+ border:0;
+ height:150px;
+ width:500px;
+ position:fixed;
+ bottom:2.5rem;
+ right:2.2rem;
+ z-index: 9999;
+ box-shadow:0 2px 20px 0 rgba(0,0,0,.13);
+ border-radius:8px;
+ transition:all .5s ease-in-out
+}
+
+.notification-callout-alert img {
+ transition:all .5s ease-in-out;
+ margin-top: 20px;
+}
+
+@media screen and (max-width:39.9375em) {
+ .notification-callout-alert {
+  width: 340px;
+  height: 170px;
+  padding: 10px;
+  right: 1rem;
+  bottom: 1rem;
+  border: 2px solid $primary;
+ }
+}
+.notification-callout-alert-header {
+ font-weight:600;
+ font-size:19px;
+ color: $primary;
+ margin-bottom:0px
+}
+.notification-callout-alert-content {
+    .rich-text {
+     font-size:13px;
+     color: #777;
+     max-width:350px;
+     line-height:19px;
+     margin-bottom:6px;
+     p {margin-bottom: 0;}
+     }
+}
+ 
+ // END CALLOUT NOTIFICATION
+ 
+ 
+ 
+
+// TESTIMONIAL 
+ 
+$full-width-testimonial-quote-color: $white;
+$full-width-testimonial-vertical-padding: 1rem;
+
+.full-width-testimonial-icon {
+  .quote-path {
+    fill:none;
+    stroke: $full-width-testimonial-quote-color;
+    stroke-width:2.5192;
+    stroke-miterlimit:10;
+  }
+}
+
+.full-width-testimonial-content,
+.full-width-testimonial-icon {
+  text-align: center;
+}
+.full-width-testimonial-section {
+  padding-top: $full-width-testimonial-vertical-padding;
+  
+  .full-width-testimonial-text {
+    font-weight: 300;
+    color: #ffffff;
+    padding-left: 30px;
+    padding-right: 30px;
+    // Adjust margin-top for line spacing
+    margin-top: -5px;
+    
+    @include breakpoint(small) {
+      padding-left: 50px;
+      padding-right: 50px;
+      font-size: 1.5em;
+    }
+    
+    @include breakpoint(medium) {
+      padding-left: 100px;
+      padding-right: 100px;
+    }
+    
+    @include breakpoint(large) {
+      padding-left: 180px;
+      padding-right: 180px;
+      font-size: 1.8em;
+    }
+    
+    @include breakpoint(xlarge) {
+      padding-left: 300px;
+      padding-right: 300px;
+    }
+  }
+  
+  .full-width-testimonial-source {
+    font-size: 1.2em;
+    font-weight: 600;
+    color: #ffffff;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    padding-bottom: 0;
+    margin-bottom: 0.2em;
+    
+    @include breakpoint(small) {
+      font-size: 1.0em;
+    }
+  }
+  
+  .full-width-testimonial-source-context {
+    display: block;
+    font-size: 0.9em;
+    font-weight: 500;
+    color: #ffffff;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+  
+    @include breakpoint(small) {
+      font-size: 0.8em;
+    }
+  }
+  
+  .slick-slider {
+    margin-bottom: 0px;
+  }
+}
+
+.full-width-testimonial-text,
+.full-width-testimonial-content,
+.full-width-testimonial-source,
+.full-width-testimonial-icon {
+  padding-bottom: $full-width-testimonial-vertical-padding;
+}
+
+.full-width-testimonial-content {
+  width: 100%;
+}
+ 
+  // END TESTIMONIAL
